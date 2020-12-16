@@ -8,7 +8,6 @@ on:
 jobs:
   upload:
     name: PyPI and gh-pages
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     runs-on: ubuntu-latest
     strategy:
       matrix:
