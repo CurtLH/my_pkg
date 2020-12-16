@@ -41,19 +41,9 @@ jobs:
         pip install pytest-cov
         pip install .
         pytest -v
-    - name: Upload dist
-      uses: actions/upload-artifact@master
-      with:
-        name: pypi-dist
-        path: dist
     - name: Build docs
       run: |
         pip install sphinx
         cd docs
         make html
         touch build/html/.nojekyll
-    - name: Upload docs
-      uses: actions/upload-artifact@master
-      with:
-        name: sphinx-docs
-        path: docs/build/html
