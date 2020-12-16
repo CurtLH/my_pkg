@@ -2,4 +2,6 @@
 
 # My Package
 
+Here is a link to the documentation
+
 https://curtlh.github.io/my_pkg/
