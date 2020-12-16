@@ -1,14 +1,6 @@
 name: Python Package
 
-on:
-  push:
-    branches:
-      - master
-    tags:
-      - '*'
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   build:
@@ -70,21 +62,27 @@ jobs:
         python-version: [3.7]
     steps:
     - uses: actions/checkout@v2
-    - name: Download dist
-      uses: actions/download-artifact@master
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
       with:
-        name: pypi-dist
-        path: dist
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install -r requirements.txt
+    - name: Build source distribution
+      run: python setup.py sdist bdist_wheel
+    - name: Build docs
+      run: |
+        pip install sphinx
+        cd docs
+        make html
+        touch build/html/.nojekyll
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__
         password: ${{ secrets.pypi_password }}
-    - name: Download docs
-      uses: actions/download-artifact@master
-      with:
-        name: sphinx-docs
-        path: docs/build/html
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
